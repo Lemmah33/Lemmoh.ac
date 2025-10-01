@@ -1,0 +1,56 @@
+<?php
+// Database connection
+$conn = new mysqli("localhost", "root", "", "fashion_store");
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+$sql = "SELECT * FROM inventory";
+$result = $conn->query($sql);
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fashion Store Inventory</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        table, th, td { border: 1px solid #ccc; }
+        th, td { padding: 10px; text-align: center; }
+        th { background: #222; color: #fff; }
+    </style>
+</head>
+<body>
+    <h1>Inventory Management</h1>
+    <table>
+        <tr>
+            <th>Item</th>
+            <th>Price</th>
+            <th>Bought</th>
+            <th>Sold</th>
+            <th>In Stock</th>
+            <th>Revenue</th>
+        </tr>
+        <?php
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                echo "<tr>
+                        <td>".$row["item_name"]."</td>
+                        <td>$".$row["price"]."</td>
+                        <td>".$row["bought"]."</td>
+                        <td>".$row["sold"]."</td>
+                        <td>".$row["in_stock"]."</td>
+                        <td>$".$row["revenue"]."</td>
+                      </tr>";
+            }
+        } else {
+            echo "<tr><td colspan='6'>No inventory data found</td></tr>";
+        }
+        ?>
+    </table>
+</body>
+</html>
+
+<?php $conn->close(); ?>
